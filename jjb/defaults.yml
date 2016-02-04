@@ -1,0 +1,7 @@
+name: global
+logrotate: *logrotate
+disabled: false
+repos: *repos
+refspec: *refbranch
+branch: *branch
+distributions: *distributions

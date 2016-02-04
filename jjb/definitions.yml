@@ -1,0 +1,31 @@
+## alias definitions
+name: definitions
+logrotate: &logrotate
+  numToKeep: 5
+distributions: !!python/tuple &distributions
+ - wheezy
+ - jessie
+ - sid
+repos: &repos
+ - 'https://github.com/meebey/smuxi.git'
+reftag: &reftag
+ - '+refs/tags/*:refs/remotes/origin/tags/*'
+refbranch: &refbranch
+ - '+refs/heads/*:refs/remotes/origin/*'
+branch: &branch
+  - 'master'
+scm: &scm
+  - git:
+      url: '{repos}'
+      name: origin
+      basedir: source
+      refspec: '{refspec}'
+      branches:
+        - '{branch}'
+      wipe-workspace: false
+      submodule:
+        disable: false
+email: &email
+  recipients: "linuxmaniac@torreviejawireless.org"
+pollscm: &pollscm
+  cron: '{cron}'

@@ -1,0 +1,41 @@
+name: '{name}-piuparts'
+project-type: matrix
+description: |
+  Installation and upgrade tests for {name} Debian packages.
+  <!-- Do NOT edit this job through the web, it is generated via jenkins-job-builder! -->
+disabled: false
+execution-strategy:
+  sequential: true
+axes:
+  - axis:
+      type: user-defined
+      name: distribution
+      values: '{obj:distributions}'
+builders:
+  - shell: |
+     echo "* Removing files workspace before copying artifacts from another project. *"
+     rm -f ./* || true
+  - copyartifact:
+      project: '{name}-binaries/distribution=$distribution'
+      filter: '*.deb'
+      which-build: upstream-build
+      fallback-to-last-successful: true
+      flatten: true
+      target: 'artifacts/'
+  - shell:
+      !include-raw-escape: scripts/piuparts.sh
+publishers:
+  - tap:
+      results: 'piuparts.tap'
+  - archive:
+      artifacts: 'piuparts.*'
+  - fingerprint:
+      record-artifacts: true
+  - workspace-cleanup:
+      dirmatch: false
+  - email: *email
+wrappers:
+  - timestamps
+  - timeout:
+      timeout: 240
+      fail: true

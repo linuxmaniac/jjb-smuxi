@@ -1,0 +1,27 @@
+# This jenkins-job-build configuration sets up Jenkins jobs
+# for building Debian packages of smuxi
+## defines
+- defaults: !include: definitions.yml
+- defaults: !include: defaults.yml
+
+## the job template
+- job-template: !include: templates/source.yml
+- job-template: !include: templates/binaries.yml
+- job-template: !include: templates/repos.yml
+- job-template: !include: templates/piuparts.yml
+
+# default project
+- default_project: &default_project
+    name: default_project
+    jobs:
+      - '{name}-source'
+      - '{name}-binaries'
+      - '{name}-repos'
+      - '{name}-piuparts'
+
+## list of projects with their configurations
+# build based on branches
+- project:
+    name: smuxidev-nightly
+    cron: '@midnight'
+    <<: *default_project

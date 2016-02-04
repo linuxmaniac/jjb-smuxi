@@ -1,0 +1,37 @@
+name: '{name}-repos'
+project-type: matrix
+description: |
+  Repository handling for Debian packages of {name}.
+  <!-- Do NOT edit this job through the web, it is generated via jenkins-job-builder! -->
+execution-strategy:
+  sequential: true
+axes:
+  - axis:
+      type: user-defined
+      name: distribution
+      values: '{obj:distributions}'
+builders:
+  - shell: |
+     echo "* Removing files workspace before copying artifacts from another project. *"
+     rm -f ./* || true
+  - copyartifact:
+      project: '{name}-binaries/distribution=$distribution'
+      filter: '*'
+      which-build: upstream-build
+      fallback-to-last-successful: true
+      target: 'binaries/'
+  - shell:
+      !include-raw-escape: scripts/repos.sh
+publishers:
+  - archive:
+      artifacts: '**/*.dsc,**/*.changes'
+  - fingerprint:
+      record-artifacts: true
+  - workspace-cleanup:
+      dirmatch: false
+  - email: *email
+wrappers:
+  - timestamps
+  - timeout:
+      timeout: 90
+      fail: true

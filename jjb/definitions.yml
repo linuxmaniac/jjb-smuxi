@@ -6,20 +6,14 @@ distributions: !!python/tuple &distributions
  - wheezy
  - jessie
  - sid
-repos: &repos
- - 'https://github.com/meebey/smuxi.git'
 reftag: &reftag
  - '+refs/tags/*:refs/remotes/origin/tags/*'
-refbranch: &refbranch
- - '+refs/heads/*:refs/remotes/origin/*'
-branch: &branch
-  - 'master'
 scm: &scm
   - git:
-      url: '{repos}'
+      url: https://github.com/meebey/smuxi.git
       name: origin
       basedir: source
-      refspec: '{refspec}'
+      refspec: '+refs/heads/*:refs/remotes/origin/*'
       branches:
         - '{branch}'
       wipe-workspace: false

@@ -19,9 +19,8 @@ builders:
       filter: '*'
       which-build: upstream-build
       fallback-to-last-successful: true
-  - shell: "build-and-provide-package"
   - shell:
-      !include-raw-escape: scripts/jjb_debc.sh
+      !include-raw-escape: scripts/jdg-build-package
   - shell: |
       mkdir -p report
       lintian-junit-report *.changes > report/lintian.xml

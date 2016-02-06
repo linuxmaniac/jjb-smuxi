@@ -10,7 +10,7 @@ reftag: &reftag
  - '+refs/tags/*:refs/remotes/origin/tags/*'
 scm: &scm
   - git:
-      url: https://github.com/meebey/smuxi.git
+      url: https://github.com/linuxmaniac/smuxi.git
       name: origin
       basedir: source
       refspec: '+refs/heads/*:refs/remotes/origin/*'

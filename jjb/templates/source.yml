@@ -11,16 +11,12 @@ axes:
       type: user-defined
       name: distribution
       values: '{obj:distributions}'
-  - axis:
-      type: slave
-      name: label
-      values:
-        - master
 triggers:
   - pollscm: *pollscm
 builders:
   - shell: rm -f ./* || true
-  - shell: generate-git-snapshot
+  - shell:
+      !include-raw-escape: scripts/jdg-generate-source
   - shell: |
       mkdir -p report
       lintian-junit-report *.dsc > report/lintian.xml

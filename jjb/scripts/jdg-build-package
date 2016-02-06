@@ -1,0 +1,24 @@
+#!/bin/bash
+# Purpose: prepare setup and invoke Debian binary package build
+
+# configuration for build-and-provide-package and its tools
+export DEB_BUILD_OPTIONS="parallel=$(nproc)"
+export BUILD_ONLY=true
+export SUDO_CMD=sudo
+export COWBUILDER_DIST=$distribution
+export POST_BUILD_HOOK=/home/vseva/jjb-smuxi/scripts/jdg-debc
+
+# set specific mirror when building for Ubuntu
+case "$distribution" in
+  trusty|precise|lucid)
+    export MIRRORSITE="http://at.archive.ubuntu.com/ubuntu/"
+    echo "*** Building for Ubuntu release ${distribution}, using mirror $MIRRORSITE ***"
+    ;;
+  lenny)
+    export MIRRORSITE="http://archive.debian.org/debian/"
+    echo "*** Building for Debian release lenny, using mirror $MIRRORSITE ***"
+    ;;
+esac
+
+# execute main jenkins-debian-glue script
+build-and-provide-package
